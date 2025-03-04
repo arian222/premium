@@ -1,0 +1,109 @@
+#!/bin/bash
+clear
+red() { echo -e "\\033[32;1m${*}\\033[0m"; }
+RED='\033[0;31m'
+NC='\e[0m'
+gray="\e[1;30m"
+Blue="\033[1;36m"
+GREEN='\033[0;32m'
+grenbo="\e[92;1m"
+YELL='\033[0;33m'
+BGX="\033[42m"
+
+yellow="\033[0;33m"
+ungu="\033[0;35m"
+Red="\033[91;1m"
+Xark="\033[0m"
+BlueCyan="\033[5;36m"
+Cyan="\033[96;1m"
+Purple="\033[95;1m"
+Green="\033[92;1m"
+WhiteBe="\033[5;37m"
+GreenBe="\033[5;32m"
+YellowBe="\033[5;33m"
+BlueBe="\033[5;34m"
+
+# Funcție pentru linie
+function linie_lunga() {
+  echo -e "${BlueCyan} ——————————————————————————————————— ${Xark} "
+}
+
+function banner_ALECS() {
+clear
+linie_lunga
+echo -e "${ungu}           ALECS VPN      ${Xark} "
+linie_lunga
+}
+
+function credit_script(){
+sleep 1
+linie_lunga
+echo -e "${ungu}   Vă mulțumim că folosiți ${Xark}"
+echo -e "${ungu}          Script creat de ${Xark}"
+echo -e "${ungu}         ALECS ${Xark}"
+linie_lunga
+exit 1
+}
+
+durata=6
+cadre=("██10%" "█████35%" "█████████65%" "█████████████80%" "█████████████████████90%" "█████████████████████████100%")
+
+num_cadre=${#cadre[@]}
+num_iteratii=$((durata))
+
+# Funcție pentru animație de încărcare
+Animatie_Incarcare() {
+    for ((i = 0; i < num_iteratii; i++)); do
+        clear
+        index=$((i % num_cadre))
+        cod_culoare=$((31 + i % 7))
+echo ""
+echo ""
+echo ""
+echo -e "\e[1;${cod_culoare}m ${cadre[$index]}\e[0m"
+sleep 0.5
+    done
+}
+
+function Incarcare_Succes() {
+clear
+echo -e  "\033[5;32mSucces\033[0m"
+sleep 1
+clear
+}
+
+banner_ALECS
+linie_lunga
+echo ""
+echo -e "${Purple}           ADĂUGARE BOT NOTIFICĂRI ${Xark} "
+echo ""
+linie_lunga
+echo ""
+read -rp "[*] Introduceți Token Bot : " -e bottoken 
+echo ""
+read -rp "[*] Introduceți ID Telegram : " -e admin
+echo -e ""
+linie_lunga 
+clear
+Animatie_Incarcare
+Incarcare_Succes
+
+if [[ ${c} != "0" ]]; then
+  echo "${d}" >/etc/bot/${bottoken}
+fi
+DATADB=$(cat /etc/bot/.bot.db | grep "^#bot#" | grep -w "${bottoken}" | awk '{print $2}')
+if [[ "${DATADB}" != '' ]]; then
+  sed -i "/\b${user}\b/d" /etc/bot/.bot.db
+fi
+echo "#bot# ${bottoken} ${admin}" >>/etc/bot/.bot.db
+
+banner_ALECS
+linie_lunga
+echo -e ""
+echo -e "${GreenBe} Operațiune reușită ${Xark} "
+echo -e ""
+echo "${yellow} Token Bot      : $bottoken ${Xark}"
+echo "${yellow} ID Telegram    : $admin ${Xark} "
+echo -e ""
+linie_lunga
+credit_script

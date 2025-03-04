@@ -1,0 +1,40 @@
+#!/bin/bash
+# Menjalankan animasi loading
+loading() {
+  local pid=$1
+  local delay=0.1
+  local spin='-\|/'
+
+  while ps -p $pid > /dev/null; do
+    local temp=${spin#?}
+    printf "[%c] " "$spin"
+    local spin=$temp${spin%"$temp"}
+    sleep $delay
+    printf "\b\b\b\b\b\b"
+  done
+
+  printf "    \b\b\b\b"
+}
+
+# Menampilkan pesan setelah animasi selesai
+function Loading_Succes() {
+clear
+echo -e  "\033[5;32mSucces\033[0m"
+sleep 1
+menu
+}
+REPO=https://raw.githubusercontent.com/arian222/premium/main/
+echo -e  "\033[5;32mloading...\033[0m"
+wget -O /usr/bin/ws "${REPO}Fls/ws" >/dev/null 2>&1
+wget -O /usr/bin/tun.conf "${REPO}Cfg/tun.conf" >/dev/null 2>&1
+wget -O /etc/systemd/system/ws.service "${REPO}Fls/ws.service" >/dev/null 2>&1
+chmod +x /etc/systemd/system/ws.service >/dev/null 2>&1
+chmod +x /usr/bin/ws >/dev/null 2>&1
+chmod 644 /usr/bin/tun.conf >/dev/null 2>&1
+systemctl disable ws >/dev/null 2>&1
+systemctl stop ws >/dev/null 2>&1
+systemctl enable ws >/dev/null 2>&1
+systemctl start ws >/dev/null 2>&1
+systemctl restart ws >/dev/null 2>&1
+sleep 3 & loading $!
+Loading_Succes
